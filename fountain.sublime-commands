@@ -1,0 +1,10 @@
+[
+  {
+    "caption": "CompletionUsing",
+    "command": "select_preset"
+  },
+  {
+    "caption": "Complete",
+    "command": "default_completion"
+  }
+]

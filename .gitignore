@@ -1,0 +1,12 @@
+.idea/*
+.idea/
+copy_to_packages.py
+presets/*
+presets/
+
+generated_plugin_code.txt
+mystify_code_generation.sublime-settings
+mystify_davinci_instruct.sublime-settings
+mystify_text_generation.sublime-settings
+
+.DS_Store
