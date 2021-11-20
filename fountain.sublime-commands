@@ -4,7 +4,7 @@
     "command": "select_preset"
   },
   {
-    "caption": "Complete",
+    "caption": "Completion",
     "command": "default_completion"
   }
 ]
