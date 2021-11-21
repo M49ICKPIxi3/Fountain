@@ -2,31 +2,8 @@ import sys
 import os
 import sublime_plugin
 import sublime
-from collections import defaultdict
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-
-print(os.environ)
-
-"""
-Takes a string and filters out everything but alphanumeric characters.
-"""
-
-# Someone somewhere probably wants a cooler filename, this is V where V you V do that...
-def filter_arb(_string):
-    return ''.join(ch for ch in _string if ch.isalpha() or ch in ['.', '-', '_'])  # Here
-
-import subprocess
-import os
-import sys
-
-
-
-
-
-
-
-
 
 def write_text(path, output):
     with open(path, 'w+') as file:
@@ -47,31 +24,23 @@ def get_fountain_settings():
 
 FOUNTAIN_LIBRARY_PATH = CURRENT_DIR + '/lib'
 
-
-SITE_PACKAGES_DIR =  ''
+SITE_PACKAGES_DIR =  os.getenv('FOUNTAIN_SITE_PACKAGES')
 os.environ['PYTHONPACKAGES'] = SITE_PACKAGES_DIR
 
 FOUNTAIN_PRESETS_DIR = os.path.join(sublime.packages_path(), 'User', 'fountain')
-
 
 sys.path.append(FOUNTAIN_LIBRARY_PATH)
 sys.path.append(CURRENT_DIR)
 sys.path.append(os.environ['PYTHONPACKAGES'])
 
-
-
 if not os.path.exists(FOUNTAIN_PRESETS_DIR):
     os.makedirs(FOUNTAIN_PRESETS_DIR)
 
-
-
 from lib.gpt3_api import GPT3API, make_default_presets
 
-
-
 import json
-
 import glob
+
 
 
 def get_all_presets_list():
@@ -85,8 +54,6 @@ def read_text(path):
     with open(path, encoding='utf-8', errors="replace") as file:
         text = file.read()
     return text
-
-
 
 def reload_presets():
     presets = get_all_presets_list()
@@ -114,6 +81,11 @@ class CompletionUsingCommand(sublime_plugin.TextCommand):
             if not region.empty():
                 content = self.view.substr(region)
                 text_gen_params['prompt'] = content
+                if 'name' in text_gen_params:
+                    del(text_gen_params['name'])
+                if 'preset_type' in text_gen_params:
+                    del(text_gen_params['preset_type'])
+
                 completion = gpt3_api.completion(text_gen_params)
                 content_with_completion = content + completion
                 self.view.replace(edit_token, region, content_with_completion)
@@ -128,7 +100,7 @@ class DefaultCompletionCommand(sublime_plugin.TextCommand):
     def run(self, edit_token):
         default_preset = get_fountain_settings()['default_preset']
 
-        preset = sublime.load_settings('fountain_' + default_preset + '.sublime-settings')
+        preset = sublime.load_settings(default_preset + '.sublime-settings')
         preset_data = preset.to_dict()
 
         text_gen_params = preset_data

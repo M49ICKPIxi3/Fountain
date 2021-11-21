@@ -148,8 +148,10 @@ class GPT3API(metaclass=SingletonOptmized3):
 
     def completion(self, completion_parameters):
         _parameters = _remove_empty(completion_parameters)
-
-        print(_parameters)
+        if 'name' in _parameters:
+            del(_parameters['name'])
+        if 'preset_type' in _parameters:
+            del(_parameters['preset_type'])
 
 
         #del(_parameters['preset_type'])
