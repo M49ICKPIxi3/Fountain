@@ -8,8 +8,12 @@ To Install:
 - `pip install openai` using python 3.8.0+ (ST Packages are either ran in 3.3.0 or 3.8.0)
 - Find the 'site_packages' directory of your python installation and add the "FOUNTAIN_SITE_PACKAGES" variable to either your .bash_profile, ( or .bashrc, .zshrc, etc.)
   - `export FOUNTAIN_SITE_PACKAGES='path_to_your_site_packages'`
+  - While you're there add your api key `export OPENAI_API_KEY="your api key here"`
 - Restart Sublime Text and that's it!
 
 If you want to add your own fine-tuned model to the list of presets, you need to copy one of the defaults in Packages directory, and change the 'engine' field to 'model' and the value to the name of your fine-tuned model. Add that filename (name only) to the "presets_list" field in the settings.
 
 This is very much a work in progress...
+
+Features / Improvements:
+- Create presets easily, open newly created preset in a new tab.
