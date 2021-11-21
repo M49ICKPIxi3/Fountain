@@ -6,5 +6,9 @@
   {
     "caption": "Completion",
     "command": "default_completion"
+  },
+  {
+    "caption": "Create Preset From",
+    "command": "create_preset_from"
   }
 ]

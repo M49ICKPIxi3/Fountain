@@ -1,11 +1,13 @@
 {
-  "length_rhymes": 0,
-  "length_synset": 0,
-  "site_packages": "/Users/saya/.pyenv/versions/3.8.0/lib/python3.8/site-packages/",
   "default_preset": "davinci",
   "preset_list": [
     "davinci",
     "davinci-codex",
-    "davinci-instruct-beta"
+    "davinci-instruct-beta",
+    "cushman_codex",
+    "curie",
+    "curie-instruct-beta",
+    "babbage",
+    "ada"
   ]
 }

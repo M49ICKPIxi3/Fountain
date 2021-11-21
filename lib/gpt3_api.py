@@ -27,7 +27,8 @@ class SingletonOptmized3(type):
 
 
 
-
+def _remove_empty(_dict):
+    return {_key: _value for _key, _value in _dict.items() if _value is not None}
 
 
 @dataclass
@@ -49,8 +50,7 @@ class CompletionPreset(object):
     stop = None
 
 
-    def _remove_empty(self, _dict):
-        return {_key: _value for _key, _value in _dict.items() if _value is not None}
+
 
 
 
@@ -138,6 +138,7 @@ responses_dir = '/Users/saya/PycharmProjects/writing_tools/main/code_generator/r
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
 class GPT3API(metaclass=SingletonOptmized3):
+    openai_api = openai
     presets = []
 
     def save_presets(self):
@@ -146,7 +147,7 @@ class GPT3API(metaclass=SingletonOptmized3):
 
 
     def completion(self, completion_parameters):
-        _parameters = completion_parameters
+        _parameters = _remove_empty(completion_parameters)
 
         print(_parameters)
 
@@ -157,7 +158,7 @@ class GPT3API(metaclass=SingletonOptmized3):
         _completion = _parameters.copy()
         _completion['timeout'] = 12312
 
-        response = openai.Completion.create(**_completion)
+        response = self.openai_api.Completion.create(**_completion)
 
 
         response_choice = response['choices'][0]
@@ -167,14 +168,7 @@ class GPT3API(metaclass=SingletonOptmized3):
 
 
 
-def make_default_presets(presets_dir):
-
-    engines_list = openai.Engine.list()
-    stop_here = ''
-
-
-
-    presets = []
+def make_default_presets(presets_dir, engines_list):
     for engine in engines_list['data']:
         engine_id = engine['id']
         default_preset = {
@@ -188,7 +182,7 @@ def make_default_presets(presets_dir):
             'n': 1
         }
 
-        file_path = presets_dir + '/'+ 'fountain_' + engine_id + '.sublime-settings'
+        file_path = presets_dir + '/' + engine_id + '.sublime-settings'
         with open(file_path, 'w+') as file:
 
             json.dump(
