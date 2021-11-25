@@ -101,6 +101,7 @@ class CompletionPreset(object):
             'logit_bias': self.logit_bias
         }))
 
+# TODO: WIP, just create these using the CompletionPreset object
 def make_new_preset(name, engine_id):
     return CompletionPreset(**{
             'name': name,
@@ -115,6 +116,7 @@ def make_new_preset(name, engine_id):
             'n': 1
         })
 
+# TODO: WIP, just create these using the CompletionPreset object
 def make_new_fine_tune_preset(name, model_id):
     return CompletionPreset(**{
             'name': name,
@@ -130,12 +132,20 @@ def make_new_fine_tune_preset(name, model_id):
         })
 
 
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+# CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 prompts_dir = '/Users/saya/PycharmProjects/writing_tools/main/code_generator/prompts/'
 responses_dir = '/Users/saya/PycharmProjects/writing_tools/main/code_generator/responses/'
 
 openai.api_key = os.getenv('OPENAI_API_KEY')
+
+"""
+TODO: Create a multi-level system, right now you can use a preset combined with a prompt
+      but a more ideal UI is to use a preset and switch the prompt the preset uses. 
+      That or keep a history of all prompts used with all presets.
+
+"""
+
 
 class GPT3API(metaclass=SingletonOptmized3):
     openai_api = openai
@@ -144,8 +154,6 @@ class GPT3API(metaclass=SingletonOptmized3):
     def save_presets(self):
         return
 
-
-
     def completion(self, completion_parameters):
         _parameters = _remove_empty(completion_parameters)
         if 'name' in _parameters:
@@ -153,15 +161,9 @@ class GPT3API(metaclass=SingletonOptmized3):
         if 'preset_type' in _parameters:
             del(_parameters['preset_type'])
 
+        _parameters['timeout'] = 7
 
-        #del(_parameters['preset_type'])
-        #del(_parameters[])
-
-        _completion = _parameters.copy()
-        _completion['timeout'] = 12312
-
-        response = self.openai_api.Completion.create(**_completion)
-
+        response = self.openai_api.Completion.create(**_parameters)
 
         response_choice = response['choices'][0]
         text_output = response_choice['text']

@@ -3,8 +3,6 @@ import os
 import sublime_plugin
 import sublime
 
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-
 def write_text(path, output):
     with open(path, 'w+') as file:
         file.write(output)
@@ -14,6 +12,10 @@ def write_json(path, data):
     with open(path, 'w+') as outfile:
         json.dump(data, outfile, sort_keys=False, indent=4, separators=(',', ': '), ensure_ascii=False)
 
+def read_json(path):
+    with open(path, 'r') as outfile:
+        _data =  json.load(outfile)
+    return _data
 
 # How to do this: command to edit the settings for a model, open the settings file in a new scratch window and
 # allow the user to fill it in, save it
@@ -22,21 +24,27 @@ def get_fountain_settings():
     fountain_settings = sublime.load_settings('fountain.sublime-settings')
     return fountain_settings.to_dict()
 
-FOUNTAIN_LIBRARY_PATH = CURRENT_DIR + '/lib'
+def append_sys_path(paths):
+    for path in paths:
+        if path not in sys.path:
+            sys.path.append(path)
 
-SITE_PACKAGES_DIR =  os.getenv('FOUNTAIN_SITE_PACKAGES')
-os.environ['PYTHONPACKAGES'] = SITE_PACKAGES_DIR
 
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+ST_USER_SITE_PACKAGES = os.getenv('ST_USER_SITE_PACKAGES')
 FOUNTAIN_PRESETS_DIR = os.path.join(sublime.packages_path(), 'User', 'fountain')
+FOUNTAIN_SETTINGS_PATH = os.path.join('Packages', 'fountain', 'fountain.sublime-settings')
+FOUNTAIN_SETTINGS_FULL_PATH = os.path.join(sublime.packages_path(), 'fountain', 'fountain.sublime-settings')
 
-sys.path.append(FOUNTAIN_LIBRARY_PATH)
-sys.path.append(CURRENT_DIR)
-sys.path.append(os.environ['PYTHONPACKAGES'])
+append_sys_path([
+    ST_USER_SITE_PACKAGES
+])
 
 if not os.path.exists(FOUNTAIN_PRESETS_DIR):
     os.makedirs(FOUNTAIN_PRESETS_DIR)
 
-from lib.gpt3_api import GPT3API, make_default_presets
+
+from .lib.gpt3_api import GPT3API, make_default_presets
 
 import json
 import glob
@@ -59,7 +67,9 @@ def reload_presets():
     presets = get_all_presets_list()
     fountain_settings = get_fountain_settings()
     fountain_settings['presets_list'] = presets
-    write_json(CURRENT_DIR + '/fountain.sublime-settings', fountain_settings)
+    write_json(FOUNTAIN_SETTINGS_FULL_PATH, fountain_settings)
+    sublime.load_resource(FOUNTAIN_SETTINGS_PATH)
+    sublime.save_settings('fountain.sublime-settings')
 
 
 
@@ -67,7 +77,7 @@ gpt3_api = GPT3API()
 
 make_default_presets(FOUNTAIN_PRESETS_DIR, gpt3_api.openai_api.Engine.list())
 
-
+#reload_presets()
 
 # Command using a settings reader, menu, on_done
 
@@ -140,8 +150,12 @@ class SelectPresetCommand(sublime_plugin.TextCommand):
         if index in index_to_preset:
             preset_name = index_to_preset[index]
 
-        preset = sublime.load_settings(preset_name + '.sublime-settings')
-        preset_data = preset.to_dict()
+        print(index_to_preset)
+
+        #preset = sublime.load_settings(preset_name + '.sublime-settings')
+        preset_data = read_json(os.path.join(sublime.packages_path(), 'User', 'fountain', preset_name + '.sublime-settings'))
+        #preset_data = preset.to_dict()
+        #preset_data = preset.to_dict()
 
         self.view.run_command('completion_using', args={
             'preset': preset_data
