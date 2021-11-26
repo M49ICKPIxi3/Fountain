@@ -6,11 +6,13 @@ Sublime Text plugin for GPT-3
 Highlight the text you want to use as a prompt, then run either the Completion or CompletionUsing commands to generate a completion using the default or selected preset.
 
 ### CompletionUsing:
-![screen_shot_1](https://user-images.githubusercontent.com/43641857/142745626-6a263c55-047b-408f-8d3f-9e1914b6b1f5.png)
-![screen_shot_2](https://user-images.githubusercontent.com/43641857/142745631-0fdd3293-5059-4df6-99b6-d5945334c60d.png)
-![screen_shot_3](https://user-images.githubusercontent.com/43641857/142745633-4986569f-d1bb-4438-a4c6-42fe86dc4d17.png)
+![st_fountain_image1](https://user-images.githubusercontent.com/43641857/143515081-206a699d-3cee-445a-82f9-4379e329abaf.png)
+![st_fountain_image2](https://user-images.githubusercontent.com/43641857/143515082-b080635f-6781-4e5d-b72c-50973f212b8c.png)
+![st_fountain_image3](https://user-images.githubusercontent.com/43641857/143515085-833d12b5-c242-464d-8649-5c407eab4cce.png)
+![st_fountain_image4](https://user-images.githubusercontent.com/43641857/143515131-1a7052ff-acf1-4d8f-bcea-ef958a8e0dcb.png)
 
 ## Installation
+
 Navigate to the packages folder for sublime text:
 
   `git clone https://github.com/M49ICKPIxi3/fountain.git`
