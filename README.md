@@ -17,7 +17,7 @@ Navigate to the packages folder for sublime text:
 
   `git clone https://github.com/M49ICKPIxi3/fountain.git`
 
-Install the Python Library for OpenAI's API:
+Install the Python Library for [OpenAI](https://github.com/openai/openai-python)'s API:
 
   `pip install openai`
 
